@@ -24,8 +24,6 @@ let fuseOptions = {
   //   keys: ["id", "airport_ref", "airport_ident", "description", "frequency_mhz"],
 };
 
-console.clear();
-
 const App: FC = () => {
   const [searchResult, setSearchResult] = useState<AirportElementT[]>([]);
   const [frequencyInput, setFrequencyInput] = useState<string | number>(118.3);
