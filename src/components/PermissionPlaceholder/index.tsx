@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { Result } from "antd";
+
 import { Container, PermissionsPlaceholderBody } from "./index.styled";
 
 type T = {

@@ -1,5 +1,7 @@
 import { Dispatch, FC, SetStateAction } from "react";
+
 import { Slider } from "antd";
+
 import { SliderContainer } from "./index.styled";
 
 type T = {

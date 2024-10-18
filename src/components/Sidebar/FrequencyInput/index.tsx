@@ -1,7 +1,10 @@
 import { Dispatch, FC, SetStateAction, useEffect } from "react";
+
 import { AimOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { Input, Tooltip } from "antd";
-import { CoordinatesT } from "../../../types";
+
+import { CoordinatesT } from "types";
+
 import { InputContainer, ButtonWrapper } from "./index.styled";
 
 type T = {
@@ -29,8 +32,8 @@ const FrequencyInput: FC<T> = ({
       navigator.geolocation.getCurrentPosition((position) => {
         const p = position.coords;
 
-        // setCoords({ lat: 51.505, lon: -0.09 });
-        setCoords({ lat: p.latitude, lon: p.longitude });
+        setCoords({ lat: 51.505, lon: -0.09 });
+        // setCoords({ lat: p.latitude, lon: p.longitude });
       });
     }
   };

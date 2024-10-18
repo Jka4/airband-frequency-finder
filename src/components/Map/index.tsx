@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction, useEffect, useMemo } from "react";
-import { AirportElementT, CoordinatesT } from "../../types";
+
 import {
   Circle,
   Marker,
@@ -9,6 +9,9 @@ import {
   useMap,
 } from "react-leaflet";
 import { LatLngExpression } from "leaflet";
+
+import { AirportElementT, CoordinatesT } from "types";
+
 import { Container, MapWrapper } from "./index.styled";
 
 type T = {

@@ -1,9 +1,12 @@
 import { Dispatch, FC, SetStateAction } from "react";
-import { maxDistanceOfReceiveWithPropagations } from "../../constants";
-import { AirportElementT, CoordinatesT } from "../../types";
+
+import { maxDistanceOfReceiveWithPropagations } from "constants/index";
+import { AirportElementT, CoordinatesT } from "types";
+
 import FrequencyInput from "./FrequencyInput";
 import DistanceSlider from "./DistanceSlider";
 import ResultsList from "./ResultsList";
+
 import { Container, String } from "./index.styled";
 
 type T = {

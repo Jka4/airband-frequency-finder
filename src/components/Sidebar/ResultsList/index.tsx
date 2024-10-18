@@ -1,7 +1,10 @@
 import { Dispatch, FC, SetStateAction } from "react";
-import { AirportElementT } from "../../../types";
-import { Container } from "./index.styled";
+
+import { AirportElementT } from "types";
+
 import Card from "./Card";
+
+import { Container } from "./index.styled";
 
 type T = {
   searchResult: AirportElementT[];
@@ -16,11 +19,11 @@ const ResultsList: FC<T> = ({
 }) => {
   return (
     <Container>
-      {searchResult.map((element) => {
+      {searchResult.map((data) => {
         return (
           <Card
-            key={element.id}
-            element={element}
+            key={data.id}
+            data={data}
             activeCardId={activeCardId}
             setActiveCardId={setActiveCardId}
           />

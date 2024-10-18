@@ -1,15 +1,17 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
+
+import { AirportElementT } from "types";
+
 import { CardWrapper } from "./index.styled";
-import { AirportElementT } from "../../../../types";
 import { String } from "../index.styled";
 
 type T = {
-  element: AirportElementT;
+  data: AirportElementT;
   activeCardId: string | null;
   setActiveCardId: Dispatch<SetStateAction<string | null>>;
 };
 
-const Card: FC<T> = ({ element, activeCardId, setActiveCardId }) => {
+const Card: FC<T> = ({ data, activeCardId, setActiveCardId }) => {
   const {
     name,
     id,
@@ -19,7 +21,7 @@ const Card: FC<T> = ({ element, activeCardId, setActiveCardId }) => {
     bearing,
     typeDesc,
     frequency_mhz,
-  }: any = element;
+  }: any = data;
 
   const ref = useRef<HTMLDivElement>(null);
 

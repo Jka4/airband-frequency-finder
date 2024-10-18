@@ -1,16 +1,18 @@
 import { FC, useEffect, useState } from "react";
 import Fuse from "fuse.js";
-import { airports } from "./data/airports";
-import Sidebar from "./pages/Sidebar";
-import { defaultDistanceOfReceive } from "./constants";
-import PermissionsPlaceholder from "./pages/PermissionPlaceholder";
-import { AirportElementT, CoordinatesT } from "./types";
 import sortBy from "lodash.sortby";
-import MapContainer from "./pages/Map";
-import { AppContainer } from "./App.styled";
-import { bearing } from "./utils/bearing";
+
+import { airports } from "data/airports";
+import { defaultDistanceOfReceive } from "constants/index";
+import { AirportElementT, CoordinatesT } from "types";
+import { bearing } from "utils/bearing";
 import { useDeepCompareEffect } from "react-use";
-import { distanceBetweenCoordinates } from "./utils/distanceBetweenCoordinates";
+import { distanceBetweenCoordinates } from "utils/distanceBetweenCoordinates";
+
+import Sidebar from "components/Sidebar";
+import PermissionsPlaceholder from "components/PermissionPlaceholder";
+import MapContainer from "components/Map";
+import { AppContainer } from "./App.styled";
 
 let fuseOptions = {
   shouldSort: true,
