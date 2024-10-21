@@ -32,8 +32,8 @@ const FrequencyInput: FC<T> = ({
       navigator.geolocation.getCurrentPosition((position) => {
         const p = position.coords;
 
-        setCoords({ lat: 51.505, lon: -0.09 });
-        // setCoords({ lat: p.latitude, lon: p.longitude });
+        // setCoords({ lat: 51.505, lon: -0.09 });
+        setCoords({ lat: p.latitude, lon: p.longitude });
       });
     }
   };
