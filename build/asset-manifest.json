@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/airband-frequency-finder/static/css/main.1c5cc640.css",
+    "main.js": "/airband-frequency-finder/static/js/main.cf75bf83.js",
+    "index.html": "/airband-frequency-finder/index.html",
+    "main.1c5cc640.css.map": "/airband-frequency-finder/static/css/main.1c5cc640.css.map",
+    "main.cf75bf83.js.map": "/airband-frequency-finder/static/js/main.cf75bf83.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1c5cc640.css",
+    "static/js/main.cf75bf83.js"
+  ]
+}
