@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/airband-frequency-finder/static/css/main.1c5cc640.css",
-    "main.js": "/airband-frequency-finder/static/js/main.fba64ebe.js",
+    "main.js": "/airband-frequency-finder/static/js/main.ccb4d765.js",
     "index.html": "/airband-frequency-finder/index.html",
     "main.1c5cc640.css.map": "/airband-frequency-finder/static/css/main.1c5cc640.css.map",
-    "main.fba64ebe.js.map": "/airband-frequency-finder/static/js/main.fba64ebe.js.map"
+    "main.ccb4d765.js.map": "/airband-frequency-finder/static/js/main.ccb4d765.js.map"
   },
   "entrypoints": [
     "static/css/main.1c5cc640.css",
-    "static/js/main.fba64ebe.js"
+    "static/js/main.ccb4d765.js"
   ]
 }
