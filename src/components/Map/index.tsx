@@ -5,6 +5,7 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from "react";
 
 import {
@@ -45,13 +46,12 @@ const MapContainer: FC<T> = ({
 }) => {
   const markerRef = useRef(null);
 
-  const RecenterAutomatically = ({ lat, lng }: any) => {
-    const map = useMap();
-    useEffect(() => {
-      map.setView([lat, lng]);
-    }, [lat, lng]);
-    return null;
-  };
+  const [coordsForCentering, setCoordsForCentering] = useState<
+    CoordinatesT | any
+  >({
+    lat: 0,
+    lng: 0,
+  });
 
   const activeCardIdCoords = useMemo(() => {
     return searchResult.find((el) => el.id === activeCardId);
@@ -65,13 +65,35 @@ const MapContainer: FC<T> = ({
     ],
   ];
 
+  const RecenterAutomatically = ({ lat, lng }: any) => {
+    const map = useMap();
+    useEffect(() => {
+      map.setView([lat, lng]);
+    }, [lat, lng]);
+    return null;
+  };
+
+  useEffect(() => {
+    setCoordsForCentering({
+      lat: coords.lat,
+      lng: coords.lng,
+    });
+  }, []);
+
   const eventHandlers = useMemo(
     () => ({
       dragend() {
         const marker: any = markerRef.current;
 
         if (marker != null) {
-          setCoords(marker._latlng);
+          setCoordsForCentering(marker.getLatLng());
+        }
+      },
+      drag() {
+        const marker: any = markerRef.current;
+
+        if (marker != null) {
+          setCoords(marker.getLatLng());
         }
       },
     }),
@@ -80,7 +102,7 @@ const MapContainer: FC<T> = ({
 
   return (
     <Container>
-      <MapWrapper center={coords} zoom={6} scrollWheelZoom={true}>
+      <MapWrapper center={coordsForCentering} zoom={6} scrollWheelZoom={true}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -101,6 +123,7 @@ const MapContainer: FC<T> = ({
           eventHandlers={eventHandlers}
           ref={markerRef}
           icon={housingIcon}
+          autoPan={true}
           draggable
         >
           <Popup>My location</Popup>
@@ -123,7 +146,10 @@ const MapContainer: FC<T> = ({
           );
         })}
 
-        <RecenterAutomatically lat={coords.lat} lng={coords.lng} />
+        <RecenterAutomatically
+          lat={coordsForCentering.lat}
+          lng={coordsForCentering.lng}
+        />
       </MapWrapper>
     </Container>
   );
