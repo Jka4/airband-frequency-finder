@@ -125,6 +125,7 @@ const MapContainer: FC<T> = ({
           icon={housingIcon}
           autoPan={true}
           draggable
+          zIndexOffset={123}
         >
           <Popup>My location</Popup>
         </Marker>
