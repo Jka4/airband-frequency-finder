@@ -6,6 +6,7 @@ import { Input, Tooltip } from "antd";
 import { CoordinatesT } from "types";
 
 import { InputContainer, ButtonWrapper } from "./index.styled";
+import { log } from "console";
 
 type T = {
   frequencyInput: number | string;
@@ -40,28 +41,36 @@ const FrequencyInput: FC<T> = ({
   };
 
   const getLocation = async () => {
-    if (!navigator.geolocation) return;
+    console.log(1);
 
+    if (!navigator.geolocation) return;
+    console.log(2);
     if (navigator.permissions) {
+      console.log(3);
       try {
         const status = await navigator.permissions.query({
           name: "geolocation" as PermissionName,
         });
+        // console.log("🚀 ~ status:", status);
+
         if (status.state === "denied") {
           alert("Доступ до геолокації заборонено у налаштуваннях браузера.");
           return;
         }
-      } catch (e) {}
+      } catch (e) {
+        console.log("🚀 ~ e:", e);
+      }
     }
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const p = position.coords;
+        console.log("🚀 ~ p:", p);
         setCoords({ lat: p.latitude, lon: p.longitude });
       },
       (error) => {
         if (error.code === error.PERMISSION_DENIED) {
-          alert("Будь ласка, дозвольте доступ до геолокації.");
+          // alert("Будь ласка, дозвольте доступ до геолокації.");
         } else {
           alert("Не вдалося отримати геолокацію.");
         }
