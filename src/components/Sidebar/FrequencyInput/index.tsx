@@ -18,7 +18,6 @@ const FrequencyInput: FC<T> = ({
   frequencyInput,
   setFrequencyInput,
   coords,
-  setCoords,
 }) => {
   const inputOnChangeAndTransform = (e: any) => {
     let value = e.target.value;
@@ -47,33 +46,37 @@ const FrequencyInput: FC<T> = ({
         const status = await navigator.permissions.query({
           name: "geolocation" as PermissionName,
         });
+
         if (status.state === "denied") {
           alert("Доступ до геолокації заборонено у налаштуваннях браузера.");
           return;
         }
-      } catch (e) {}
+      } catch (e) {
+        // console.log("🚀 ~ e:", e);
+      }
     }
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const p = position.coords;
-        setCoords({ lat: p.latitude, lon: p.longitude });
-      },
-      (error) => {
-        if (error.code === error.PERMISSION_DENIED) {
-          alert("Будь ласка, дозвольте доступ до геолокації.");
-        } else {
-          alert("Не вдалося отримати геолокацію.");
-        }
-      }
-    );
+    // navigator.geolocation.getCurrentPosition(
+    //   (position) => {
+    //     const p = position.coords;
+    //     console.log("🚀 ~ p:", p);
+    //     setCoords({ lat: p.latitude, lng: p.longitude });
+    //   },
+    //   (error) => {
+    //     if (error.code === error.PERMISSION_DENIED) {
+    //       alert("Будь ласка, дозвольте доступ до геолокації.");
+    //     } else {
+    //       alert("Не вдалося отримати геолокацію.");
+    //     }
+    //   }
+    // );
   };
 
   useEffect(() => {
     getLocation();
   }, []);
 
-  const haveCoordinates = !!(!coords.lat && !coords.lon);
+  const haveCoordinates = !!(!coords.lat && !coords.lng);
 
   return (
     <InputContainer>

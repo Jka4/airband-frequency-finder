@@ -3,6 +3,6 @@ export type AirportElementT = {
 };
 
 export type CoordinatesT = {
-  lat: number | null;
-  lon: number | null;
+  lat: number;
+  lng: number;
 };

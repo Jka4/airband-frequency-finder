@@ -29,16 +29,16 @@ const App: FC = () => {
   const [searchResult, setSearchResult] = useState<AirportElementT[]>([]);
   const [frequencyInput, setFrequencyInput] = useState<string | number>(118.3);
   const [sliderValue, setSliderValue] = useState(defaultDistanceOfReceive);
-  const [coords, setCoords] = useState<CoordinatesT>({
+  const [coords, setCoords] = useState<CoordinatesT | any>({
     lat: 46.47,
-    lon: 30.75,
+    lng: 30.75,
   }); // Odesa coords by default
   const [geoPermissions, setGeoPermissions] = useState(true);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
   // search triggered by changes
   useEffect(() => {
-    if (!coords.lat && !coords.lon && !frequencyInput) return;
+    if (!coords.lat && !coords.lng && !frequencyInput) return;
 
     const freqRaw = (frequencyInput + "").replace(/\D/g, "");
     const freq = freqRaw.slice(0, 3) + "." + freqRaw.slice(3) + "";
@@ -56,7 +56,7 @@ const App: FC = () => {
       const distanceInKm = Math.round(
         distanceBetweenCoordinates(
           Number(coords.lat),
-          Number(coords.lon),
+          Number(coords.lng),
           Number(latitude_deg),
           Number(longitude_deg)
         ) / 1000
@@ -73,7 +73,7 @@ const App: FC = () => {
       ) {
         const bearingDeg = bearing(
           Number(coords.lat),
-          Number(coords.lon),
+          Number(coords.lng),
           Number(latitude_deg),
           Number(longitude_deg)
         );
@@ -115,7 +115,7 @@ const App: FC = () => {
               (position) => {
                 setCoords({
                   lat: position.coords.latitude,
-                  lon: position.coords.longitude,
+                  lng: position.coords.longitude,
                 });
               },
               () => {}
@@ -157,6 +157,7 @@ const App: FC = () => {
 
       <MapContainer
         coords={coords}
+        setCoords={setCoords}
         sliderValue={sliderValue}
         searchResult={searchResult}
         activeCardId={activeCardId}

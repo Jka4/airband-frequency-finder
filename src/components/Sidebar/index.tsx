@@ -33,7 +33,7 @@ const Sidebar: FC<T> = ({
   setActiveCardId,
 }) => {
   const latRound = Math.round((coords?.lat || 0) * 100) / 100 || "-";
-  const lonRound = Math.round((coords?.lon || 0) * 100) / 100 || "-";
+  const lonRound = Math.round((coords?.lng || 0) * 100) / 100 || "-";
 
   const formatter = (value: number) => {
     const above1k = value >= maxDistanceOfReceiveWithPropagations;
@@ -56,7 +56,7 @@ const Sidebar: FC<T> = ({
       />
 
       <String>
-        {`lat: ${latRound}  ,  Lon: ${lonRound || "-"}\n \n \n`}
+        {`lat: ${latRound}  ,  lng: ${lonRound || "-"}\n \n \n`}
         {`Radius: ${formatter(sliderValue)}`}
       </String>
 
