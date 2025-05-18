@@ -12,16 +12,7 @@ type T = {
 };
 
 const Card: FC<T> = ({ data, activeCardId, setActiveCardId }) => {
-  const {
-    name,
-    id,
-    airport_ident,
-    distance,
-    type,
-    bearing,
-    typeDesc,
-    frequency_mhz,
-  }: any = data;
+  const { name, id, distance, type, bearing, typeDesc, frequency_mhz }: any = data;
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -32,6 +23,7 @@ const Card: FC<T> = ({ data, activeCardId, setActiveCardId }) => {
         inline: "center",
         behavior: "smooth",
       });
+    } else {
     }
   }, [ref, activeCardId, id]);
 
@@ -56,9 +48,7 @@ const Card: FC<T> = ({ data, activeCardId, setActiveCardId }) => {
       </String>
 
       <String>{`Description: ${typeDesc || "-"}`}</String>
-      <String>{`Frequency: ${
-        frequency_mhz ? frequency_mhz + " MHz" : "-"
-      }`}</String>
+      <String>{`Frequency: ${frequency_mhz ? frequency_mhz + " MHz" : "-"}`}</String>
     </CardWrapper>
   );
 };

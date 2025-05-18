@@ -12,6 +12,7 @@ import { distanceBetweenCoordinates } from "utils/distanceBetweenCoordinates";
 import Sidebar from "components/Sidebar";
 import MapContainer from "components/Map";
 import { AppContainer } from "./App.styled";
+import { useLocalStorage } from "hooks/useLocalStorage";
 
 let fuseOptions = {
   shouldSort: true,
@@ -27,14 +28,16 @@ let fuseOptions = {
 
 const App: FC = () => {
   const [searchResult, setSearchResult] = useState<AirportElementT[]>([]);
-  const [frequencyInput, setFrequencyInput] = useState<string | number>(118.3);
-  const [sliderValue, setSliderValue] = useState(defaultDistanceOfReceive);
-  const [coords, setCoords] = useState<CoordinatesT | any>({
+  const [sliderValue, setSliderValue] = useLocalStorage<number>("sliderValue", defaultDistanceOfReceive);
+  const [frequencyInput, setFrequencyInput] = useLocalStorage<string | number>("frequencyInput", 118.3);
+
+  const [coords, setCoords] = useLocalStorage<CoordinatesT>("coords", {
     lat: 46.47,
     lng: 30.75,
-  }); // Odesa coords by default
-  const [geoPermissions, setGeoPermissions] = useState(true);
-  const [activeCardId, setActiveCardId] = useState<string | null>(null);
+  });
+
+  const [activeCardId, setActiveCardId] = useLocalStorage<string | null>("activeCardId", null);
+  const [zoomLevel, setZoomLevel] = useLocalStorage<number>("zoomLevel", 6);
 
   // search triggered by changes
   useEffect(() => {
@@ -58,25 +61,16 @@ const App: FC = () => {
           Number(coords.lat),
           Number(coords.lng),
           Number(latitude_deg),
-          Number(longitude_deg)
-        ) / 1000
+          Number(longitude_deg),
+        ) / 1000,
       );
 
       const targetFreqStart = Number(freq) - 0.02;
       const targetFreqEnd = Number(freq) + 0.02;
       const elFreq = Number(frequency_mhz);
 
-      if (
-        distanceInKm <= sliderValue &&
-        elFreq >= targetFreqStart &&
-        elFreq <= targetFreqEnd
-      ) {
-        const bearingDeg = bearing(
-          Number(coords.lat),
-          Number(coords.lng),
-          Number(latitude_deg),
-          Number(longitude_deg)
-        );
+      if (distanceInKm <= sliderValue && elFreq >= targetFreqStart && elFreq <= targetFreqEnd) {
+        const bearingDeg = bearing(Number(coords.lat), Number(coords.lng), Number(latitude_deg), Number(longitude_deg));
 
         results.push({
           ...el.item,
@@ -91,55 +85,9 @@ const App: FC = () => {
 
   // detach line between two points
   useDeepCompareEffect(() => {
-    const activeCardInRadius = searchResult.find(
-      (el: any) => el?.id === activeCardId
-    );
+    const activeCardInRadius = searchResult.find((el: any) => el?.id === activeCardId);
     if (!activeCardInRadius) setActiveCardId(null);
   }, [searchResult, activeCardId]);
-
-  useEffect(() => {
-    const checkGeolocationPermission = async () => {
-      if (!navigator.geolocation) {
-        setGeoPermissions(false);
-        return;
-      }
-
-      if (navigator.permissions) {
-        try {
-          const result = await navigator.permissions.query({
-            name: "geolocation" as PermissionName,
-          });
-          if (result.state === "granted") {
-            setGeoPermissions(true);
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                setCoords({
-                  lat: position.coords.latitude,
-                  lng: position.coords.longitude,
-                });
-              },
-              () => {}
-            );
-          } else if (result.state === "prompt") {
-            setGeoPermissions(true);
-          } else {
-            setGeoPermissions(false);
-          }
-          // Слухаємо зміну permission
-          result.onchange = () => {
-            if (result.state === "granted") setGeoPermissions(true);
-            else setGeoPermissions(false);
-          };
-        } catch {
-          setGeoPermissions(true);
-        }
-      } else {
-        setGeoPermissions(true);
-      }
-    };
-
-    checkGeolocationPermission();
-  }, []);
 
   return (
     <AppContainer>
@@ -162,6 +110,8 @@ const App: FC = () => {
         searchResult={searchResult}
         activeCardId={activeCardId}
         setActiveCardId={setActiveCardId}
+        zoomLevel={zoomLevel}
+        setZoomLevel={setZoomLevel}
       />
     </AppContainer>
   );

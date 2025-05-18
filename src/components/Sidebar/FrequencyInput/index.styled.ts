@@ -1,11 +1,4 @@
-import styled from "styled-components/macro";
-import { Button } from "antd";
-
-export const ButtonWrapper = styled(Button)`
-  height: 40px;
-  width: 40px;
-  margin-left: 10px;
-`;
+import styled from 'styled-components/macro';
 
 export const InputContainer = styled.div`
   height: 40px;

@@ -1,26 +1,9 @@
-import {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-
-import {
-  Circle,
-  Marker,
-  Polyline,
-  Popup,
-  TileLayer,
-  useMap,
-} from "react-leaflet";
+import { Dispatch, FC, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
+import { Circle, Marker, Polyline, Popup, TileLayer, useMap, MapContainer as LeafletMapContainer } from "react-leaflet";
 import { Icon, LatLngExpression } from "leaflet";
 
 import { AirportElementT, CoordinatesT } from "types";
-
-import { Container, MapWrapper } from "./index.styled";
+import { Container } from "./index.styled";
 
 type T = {
   coords: CoordinatesT;
@@ -29,26 +12,43 @@ type T = {
   searchResult: AirportElementT[];
   activeCardId: string | null;
   setActiveCardId: Dispatch<SetStateAction<string | null>>;
+  zoomLevel: number;
+  setZoomLevel: Dispatch<SetStateAction<number>>;
 };
 
 const housingIcon = new Icon({
   iconUrl: "https://img.icons8.com/plasticine/100/exterior.png",
-  iconSize: [38, 45], // size of the icon
+  iconSize: [38, 45],
 });
 
-const MapContainer: FC<T> = ({
+const ZoomHandler = ({ setZoomLevel }: { setZoomLevel: (z: number) => void }) => {
+  useMap().on("zoomend", function (e) {
+    setZoomLevel(e.target._zoom);
+  });
+  return null;
+};
+
+const RecenterAutomatically = ({ lat, lng }: any) => {
+  const map = useMap();
+  useEffect(() => {
+    map.setView([lat, lng]);
+  }, [lat, lng, map]);
+  return null;
+};
+
+const MapComponent: FC<T> = ({
   coords,
   setCoords,
   sliderValue,
   searchResult,
   activeCardId,
   setActiveCardId,
+  zoomLevel,
+  setZoomLevel,
 }) => {
   const markerRef = useRef(null);
 
-  const [coordsForCentering, setCoordsForCentering] = useState<
-    CoordinatesT | any
-  >({
+  const [coordsForCentering, setCoordsForCentering] = useState<CoordinatesT>({
     lat: 0,
     lng: 0,
   });
@@ -59,19 +59,8 @@ const MapContainer: FC<T> = ({
 
   const polyline: any = [
     [coords.lat, coords.lng],
-    [
-      activeCardIdCoords?.latitude_deg || coords.lat,
-      activeCardIdCoords?.longitude_deg || coords.lng,
-    ],
+    [activeCardIdCoords?.latitude_deg || coords.lat, activeCardIdCoords?.longitude_deg || coords.lng],
   ];
-
-  const RecenterAutomatically = ({ lat, lng }: any) => {
-    const map = useMap();
-    useEffect(() => {
-      map.setView([lat, lng]);
-    }, [lat, lng]);
-    return null;
-  };
 
   useEffect(() => {
     setCoordsForCentering({
@@ -84,33 +73,35 @@ const MapContainer: FC<T> = ({
     () => ({
       dragend() {
         const marker: any = markerRef.current;
-
         if (marker != null) {
           setCoordsForCentering(marker.getLatLng());
         }
       },
       drag() {
         const marker: any = markerRef.current;
-
         if (marker != null) {
           setCoords(marker.getLatLng());
         }
       },
     }),
-    []
+    [setCoords],
   );
 
   return (
     <Container>
-      <MapWrapper center={coordsForCentering} zoom={6} scrollWheelZoom={true}>
+      <LeafletMapContainer
+        center={coordsForCentering}
+        zoom={zoomLevel}
+        scrollWheelZoom={true}
+        style={{ height: "100%", width: "100%" }}
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <ZoomHandler setZoomLevel={setZoomLevel} />
 
-        {activeCardId && (
-          <Polyline pathOptions={{ color: "red" }} positions={polyline} />
-        )}
+        {activeCardId && <Polyline pathOptions={{ color: "red" }} positions={polyline} />}
 
         <Circle
           center={coords}
@@ -131,29 +122,18 @@ const MapContainer: FC<T> = ({
         </Marker>
 
         {searchResult.map((el) => {
-          const markerPosition: LatLngExpression = [
-            Number(el.latitude_deg),
-            Number(el.longitude_deg),
-          ];
-
+          const markerPosition: LatLngExpression = [Number(el.latitude_deg), Number(el.longitude_deg)];
           return (
-            <Marker
-              key={el?.id}
-              position={markerPosition}
-              eventHandlers={{ click: () => setActiveCardId(el.id) }}
-            >
+            <Marker key={el?.id} position={markerPosition} eventHandlers={{ click: () => setActiveCardId(el.id) }}>
               <Popup>{`${el.name}`}</Popup>
             </Marker>
           );
         })}
 
-        <RecenterAutomatically
-          lat={coordsForCentering.lat}
-          lng={coordsForCentering.lng}
-        />
-      </MapWrapper>
+        <RecenterAutomatically lat={coordsForCentering.lat} lng={coordsForCentering.lng} />
+      </LeafletMapContainer>
     </Container>
   );
 };
 
-export default MapContainer;
+export default MapComponent;

@@ -1,11 +1,11 @@
-import { Dispatch, FC, SetStateAction, useEffect } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 
-import { AimOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined } from "@ant-design/icons";
 import { Input, Tooltip } from "antd";
 
 import { CoordinatesT } from "types";
 
-import { InputContainer, ButtonWrapper } from "./index.styled";
+import { InputContainer } from "./index.styled";
 
 type T = {
   frequencyInput: number | string;
@@ -14,11 +14,7 @@ type T = {
   setCoords: Dispatch<SetStateAction<CoordinatesT>>;
 };
 
-const FrequencyInput: FC<T> = ({
-  frequencyInput,
-  setFrequencyInput,
-  coords,
-}) => {
+const FrequencyInput: FC<T> = ({ frequencyInput, setFrequencyInput, coords }) => {
   const inputOnChangeAndTransform = (e: any) => {
     let value = e.target.value;
     value = value.replace(/[^0-9.,]/g, "");
@@ -38,44 +34,6 @@ const FrequencyInput: FC<T> = ({
     setFrequencyInput(value);
   };
 
-  const getLocation = async () => {
-    if (!navigator.geolocation) return;
-
-    if (navigator.permissions) {
-      try {
-        const status = await navigator.permissions.query({
-          name: "geolocation" as PermissionName,
-        });
-
-        if (status.state === "denied") {
-          alert("Доступ до геолокації заборонено у налаштуваннях браузера.");
-          return;
-        }
-      } catch (e) {
-        // console.log("🚀 ~ e:", e);
-      }
-    }
-
-    // navigator.geolocation.getCurrentPosition(
-    //   (position) => {
-    //     const p = position.coords;
-    //     console.log("🚀 ~ p:", p);
-    //     setCoords({ lat: p.latitude, lng: p.longitude });
-    //   },
-    //   (error) => {
-    //     if (error.code === error.PERMISSION_DENIED) {
-    //       alert("Будь ласка, дозвольте доступ до геолокації.");
-    //     } else {
-    //       alert("Не вдалося отримати геолокацію.");
-    //     }
-    //   }
-    // );
-  };
-
-  useEffect(() => {
-    getLocation();
-  }, []);
-
   const haveCoordinates = !!(!coords.lat && !coords.lng);
 
   return (
@@ -90,16 +48,6 @@ const FrequencyInput: FC<T> = ({
             <InfoCircleOutlined style={{ color: "rgba(0,0,0,.45)" }} />
           </Tooltip>
         }
-      />
-
-      <ButtonWrapper
-        icon={
-          <AimOutlined
-            style={{ fontSize: "20px", width: "100%", display: "flex" }}
-            spin={haveCoordinates}
-          />
-        }
-        onClick={getLocation}
       />
     </InputContainer>
   );
