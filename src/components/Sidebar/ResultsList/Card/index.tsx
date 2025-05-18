@@ -39,7 +39,7 @@ const Card: FC<T> = ({ data, activeCardId, setActiveCardId }) => {
       ref={ref}
     >
       <String>
-        <span>{`Distance to: ${distance || "-"}`}</span>
+        <span>{`Distance to: ${distance || "-"} km`}</span>
         <span>{`Bearing: ${bearing || "-"}`}</span>
       </String>
 
